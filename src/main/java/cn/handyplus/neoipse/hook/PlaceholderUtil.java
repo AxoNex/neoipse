@@ -4,6 +4,7 @@ import cn.handyplus.lib.util.MessageUtil;
 import cn.handyplus.neoipse.api.NeoIpSeeApi;
 import cn.handyplus.neoipse.constants.BaseNeoIpConstants;
 import cn.handyplus.neoipse.util.RegionUtil;
+import cn.handyplus.neoipse.util.IpUtil;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -64,6 +65,8 @@ public class PlaceholderUtil extends PlaceholderExpansion {
                 return getRegionPart(region, 3);
             case "district":
                 return getRegionPart(region, 4);
+            case "ip_type":
+                return getIpType(player);
             default:
                 return "";
         }
@@ -87,6 +90,27 @@ public class PlaceholderUtil extends PlaceholderExpansion {
                 return RegionUtil.getUnknownText();
             }
             return value;
+        }
+        return RegionUtil.getUnknownText();
+    }
+
+    /**
+     * 获取玩家IP类型
+     *
+     * @param player 玩家
+     * @return IP类型
+     */
+    private String getIpType(Player player) {
+        String ip = IpUtil.getIp(player);
+        if (ip == null || ip.isEmpty()) {
+            return RegionUtil.getUnknownText();
+        }
+        // IPv6 地址包含冒号，IPv4 地址包含点号
+        if (ip.contains(":")) {
+            return "IPv6";
+        }
+        if (ip.contains(".")) {
+            return "IPv4";
         }
         return RegionUtil.getUnknownText();
     }
